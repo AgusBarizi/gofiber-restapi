@@ -1,21 +1,9 @@
-###
-POST http://127.0.0.1:3000/api/product
-Accept: application/json
-Content-Type: application/json
-
-{
-  "name" : "I phone 12",
-  "stock": 5,
-  "sku": "IP12",
-  "price":12000000
-}
-
 ### Find All Products
 GET http://127.0.0.1:3000/api/products
 Accept: application/json
 
 ### Find Product By Id
-GET http://127.0.0.1:3000/api/products/2
+GET http://127.0.0.1:3000/api/products/25
 Accept: application/json
 
 ### Create Product
@@ -25,23 +13,23 @@ Content-Type: application/json
 
 {
   "name": "Redmi Note 10 Pro",
-  "price": 100,
+  "price": 3500000,
   "sku": "RN-10PRO",
-  "stock": 123
+  "stock": 10
 }
 
 ### Update Product By Id
-PUT http://127.0.0.1:3000/api/products/111
+PUT http://127.0.0.1:3000/api/products/25
 Accept: application/json
 Content-Type: application/json
 
 {
-  "name": "Redmi Note 10 Pro New Edition",
+  "name": "Smartphone BlackBerry - Black Edition",
   "price": 100,
-  "sku": "RN-10PRO",
+  "sku": "BB-001",
   "stock": 123
 }
 
 ### Delete Product By Id
-DELETE http://127.0.0.1:3000/api/products/12
+DELETE http://127.0.0.1:3000/api/products/13
 Accept: application/json
