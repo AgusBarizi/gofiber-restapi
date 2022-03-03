@@ -4,10 +4,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"m3gaplazma/gofiber-restapi/exception"
 	"m3gaplazma/gofiber-restapi/helper"
-	"m3gaplazma/gofiber-restapi/model/domain"
 	"m3gaplazma/gofiber-restapi/model/dto"
-	"m3gaplazma/gofiber-restapi/model/mapper"
-	"m3gaplazma/gofiber-restapi/repository"
+	"m3gaplazma/gofiber-restapi/service"
 	"m3gaplazma/gofiber-restapi/validation"
 	"strconv"
 )
@@ -21,47 +19,38 @@ type ProductController interface {
 }
 
 type ProductControllerImpl struct {
-	ProductRepository repository.ProductRepository
+	ProductService service.ProductService
 }
 
-func NewProductController(productRepository *repository.ProductRepositoryImpl) *ProductControllerImpl {
-	return &ProductControllerImpl{ProductRepository: productRepository}
+func NewProductController(service *service.ProductServiceImpl) *ProductControllerImpl {
+	return &ProductControllerImpl{ProductService: service}
 }
 
 func (controller *ProductControllerImpl) FindAllProducts(ctx *fiber.Ctx) error {
-	var products []domain.Product
-	products = controller.ProductRepository.FindAll()
-
-	return helper.SuccessResponse(ctx, dto.ApiResponse{Data: mapper.ToProductResponses(products)})
+	result := controller.ProductService.FindAllProducts()
+	return helper.SuccessResponse(ctx, dto.ApiResponse{Data: result})
 }
 
 func (controller *ProductControllerImpl) FindProductById(ctx *fiber.Ctx) error {
 	id, err := strconv.Atoi(ctx.Params("productId"))
 	exception.PanicIfError(err)
 
-	var product domain.Product
-	product, err = controller.ProductRepository.FindById(id)
+	var result dto.ProductResponse
+	result, err = controller.ProductService.FindProductById(id)
 	exception.PanicIfError(err)
-	
-	return helper.SuccessResponse(ctx, dto.ApiResponse{Data: mapper.ToProductResponse(product)})
+	return helper.SuccessResponse(ctx, dto.ApiResponse{Data: result})
 }
 
 func (controller *ProductControllerImpl) CreateProduct(ctx *fiber.Ctx) error {
-	createProductRequest := new(dto.CreateProductRequest)
-	err := ctx.BodyParser(createProductRequest)
+	request := new(dto.CreateProductRequest)
+	err := ctx.BodyParser(request)
 	exception.PanicIfError(err)
-	validation.CreateProductValidation(*createProductRequest)
+	validation.CreateProductValidation(*request)
 
-	product := domain.Product{
-		Name:  createProductRequest.Name,
-		Sku:   createProductRequest.Sku,
-		Stock: createProductRequest.Stock,
-		Price: createProductRequest.Price,
-	}
-	product, err = controller.ProductRepository.Create(product)
+	var result dto.ProductResponse
+	result, err = controller.ProductService.CreateProduct(*request)
 	exception.PanicIfError(err)
-
-	return helper.SuccessResponse(ctx, dto.ApiResponse{Data: mapper.ToProductResponse(product)})
+	return helper.SuccessResponse(ctx, dto.ApiResponse{Data: result})
 }
 
 func (controller *ProductControllerImpl) UpdateProduct(ctx *fiber.Ctx) error {
@@ -75,30 +64,17 @@ func (controller *ProductControllerImpl) UpdateProduct(ctx *fiber.Ctx) error {
 	request.Id = int64(id)
 	validation.UpdateProductValidation(*request)
 
-	var product domain.Product
-	product, err = controller.ProductRepository.FindById(id)
-	exception.PanicIfError(exception.NotFoundError{Message: "product not found"})
-
-	product.Name = request.Name
-	product.Sku = request.Sku
-	product.Stock = request.Stock
-	product.Price = request.Price
-	product, err = controller.ProductRepository.Update(product)
+	var result dto.ProductResponse
+	result, err = controller.ProductService.UpdateProduct(*request)
 	exception.PanicIfError(err)
-
-	return helper.SuccessResponse(ctx, dto.ApiResponse{Data: mapper.ToProductResponse(product)})
+	return helper.SuccessResponse(ctx, dto.ApiResponse{Data: result})
 }
 
 func (controller *ProductControllerImpl) DeleteProduct(ctx *fiber.Ctx) error {
 	id, err := strconv.Atoi(ctx.Params("productId"))
 	exception.PanicIfError(err)
 
-	var product domain.Product
-	product, err = controller.ProductRepository.FindById(id)
+	err = controller.ProductService.DeleteProduct(id)
 	exception.PanicIfError(err)
-
-	err = controller.ProductRepository.Delete(product)
-	exception.PanicIfError(err)
-
 	return helper.SuccessResponse(ctx, dto.ApiResponse{Message: "product was deleted"})
 }

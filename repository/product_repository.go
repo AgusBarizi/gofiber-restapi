@@ -2,7 +2,6 @@ package repository
 
 import (
 	"gorm.io/gorm"
-	"m3gaplazma/gofiber-restapi/exception"
 	"m3gaplazma/gofiber-restapi/model/domain"
 )
 
@@ -27,7 +26,9 @@ func NewProductRepository(db *gorm.DB) *ProductRepositoryImpl {
 func (repository ProductRepositoryImpl) FindAll() []domain.Product {
 	var products []domain.Product
 	err := repository.DB.Find(&products).Error
-	exception.PanicIfError(err)
+	if err != nil {
+		products = []domain.Product{}
+	}
 	return products
 }
 
