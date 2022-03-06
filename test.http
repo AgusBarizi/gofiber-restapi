@@ -33,3 +33,33 @@ Content-Type: application/json
 ### Delete Product By Id
 DELETE http://127.0.0.1:3000/api/products/13
 Accept: application/json
+
+### Find All Categories
+GET http://127.0.0.1:3000/api/categories
+Accept: application/json
+
+### Find Category By Id
+GET http://127.0.0.1:3000/api/categories/25
+Accept: application/json
+
+### Create Category
+POST http://127.0.0.1:3000/api/categories
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Redmi Note 10 Pro"
+}
+
+### Update Category By Id
+PUT http://127.0.0.1:3000/api/categories/3
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Electronic"
+}
+
+### Delete Category By Id
+DELETE http://127.0.0.1:3000/api/categories/3
+Accept: application/json
