@@ -57,13 +57,11 @@ func (service *ProductServiceImpl) UpdateProduct(request dto.UpdateProductReques
 		return dto.ProductResponse{}, err
 	}
 
-	product = domain.Product{
-		Name:  request.Name,
-		Sku:   request.Sku,
-		Stock: request.Stock,
-		Price: request.Price,
-	}
-	result, err := service.ProductRepository.Create(product)
+	product.Name = request.Name
+	product.Sku = request.Sku
+	product.Stock = request.Stock
+	product.Price = request.Price
+	result, err := service.ProductRepository.Update(product)
 	if err != nil {
 		return dto.ProductResponse{}, err
 	}
