@@ -3,10 +3,11 @@ package routes
 import (
 	"github.com/gofiber/fiber/v2"
 	"m3gaplazma/gofiber-restapi/controller"
+	"m3gaplazma/gofiber-restapi/middleware"
 )
 
 func SetupProductRoutes(router fiber.Router, controller controller.ProductController) {
-	productRoutes := router.Group("/products")
+	productRoutes := router.Group("/products", middleware.ApiKeyMiddleware)
 	productRoutes.Get("/", controller.FindAllProducts)
 	productRoutes.Get("/:productId", controller.FindProductDetail)
 	productRoutes.Post("/", controller.CreateProduct)

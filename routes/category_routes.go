@@ -3,10 +3,11 @@ package routes
 import (
 	"github.com/gofiber/fiber/v2"
 	"m3gaplazma/gofiber-restapi/controller"
+	"m3gaplazma/gofiber-restapi/middleware"
 )
 
 func SetupCategoryRoutes(router fiber.Router, controller controller.CategoryController) {
-	categoryRoutes := router.Group("/categories")
+	categoryRoutes := router.Group("/categories", middleware.ApiKeyMiddleware)
 	categoryRoutes.Get("/", controller.FindAllCategories)
 	categoryRoutes.Get("/:categoryId", controller.FindCategoryById)
 	categoryRoutes.Post("/", controller.CreateCategory)
