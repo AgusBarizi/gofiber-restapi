@@ -8,8 +8,8 @@ import (
 )
 
 type ProductService interface {
-	FindAllProducts() []dto.ProductResponse
-	FindProductById(productId int) (dto.ProductResponse, error)
+	FindAllProducts() []dto.ProductDetailResponse
+	FindProductDetail(productId int) (dto.ProductDetailResponse, error)
 	CreateProduct(request dto.CreateProductRequest) (dto.ProductResponse, error)
 	UpdateProduct(request dto.UpdateProductRequest) (dto.ProductResponse, error)
 	DeleteProduct(productId int) error
@@ -23,26 +23,27 @@ func NewProductService(repository repository.ProductRepository) *ProductServiceI
 	return &ProductServiceImpl{ProductRepository: repository}
 }
 
-func (service *ProductServiceImpl) FindAllProducts() []dto.ProductResponse {
+func (service *ProductServiceImpl) FindAllProducts() []dto.ProductDetailResponse {
 	var products []domain.Product
 	products = service.ProductRepository.FindAll()
-	return mapper.ToProductResponses(products)
+	return mapper.ToProductDetailResponses(products)
 }
 
-func (service *ProductServiceImpl) FindProductById(productId int) (dto.ProductResponse, error) {
-	product, err := service.ProductRepository.FindById(productId)
+func (service *ProductServiceImpl) FindProductDetail(productId int) (dto.ProductDetailResponse, error) {
+	product, err := service.ProductRepository.FindDetail(productId)
 	if err != nil {
-		return dto.ProductResponse{}, err
+		return dto.ProductDetailResponse{}, err
 	}
-	return mapper.ToProductResponse(product), nil
+	return mapper.ToProductDetailResponse(product), nil
 }
 
 func (service *ProductServiceImpl) CreateProduct(request dto.CreateProductRequest) (dto.ProductResponse, error) {
 	product := domain.Product{
-		Name:  request.Name,
-		Sku:   request.Sku,
-		Stock: request.Stock,
-		Price: request.Price,
+		Name:       request.Name,
+		Sku:        request.Sku,
+		Stock:      request.Stock,
+		Price:      request.Price,
+		CategoryId: request.CategoryId,
 	}
 	result, err := service.ProductRepository.Create(product)
 	if err != nil {
@@ -61,6 +62,7 @@ func (service *ProductServiceImpl) UpdateProduct(request dto.UpdateProductReques
 	product.Sku = request.Sku
 	product.Stock = request.Stock
 	product.Price = request.Price
+	product.CategoryId = request.CategoryId
 	result, err := service.ProductRepository.Update(product)
 	if err != nil {
 		return dto.ProductResponse{}, err

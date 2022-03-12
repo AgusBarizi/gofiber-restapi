@@ -13,6 +13,7 @@ func CreateProductValidation(request dto.CreateProductRequest) {
 		validation.Field(&request.Stock, validation.Required, validation.Min(0)),
 		validation.Field(&request.Sku, validation.Required),
 		validation.Field(&request.Price, validation.Required, validation.Min(100)),
+		validation.Field(&request.CategoryId, validation.Required, validation.Min(0)),
 	)
 	if err != nil {
 		panic(exception.ValidationError{
@@ -29,6 +30,7 @@ func UpdateProductValidation(request dto.UpdateProductRequest) {
 		validation.Field(&request.Stock, validation.Required, validation.Min(0)),
 		validation.Field(&request.Sku, validation.Required),
 		validation.Field(&request.Price, validation.Required, validation.Min(100)),
+		validation.Field(&request.CategoryId, validation.Required, validation.Min(0)),
 	)
 	if err != nil {
 		panic(exception.ValidationError{

@@ -12,7 +12,7 @@ import (
 
 type ProductController interface {
 	FindAllProducts(ctx *fiber.Ctx) error
-	FindProductById(ctx *fiber.Ctx) error
+	FindProductDetail(ctx *fiber.Ctx) error
 	CreateProduct(ctx *fiber.Ctx) error
 	UpdateProduct(ctx *fiber.Ctx) error
 	DeleteProduct(ctx *fiber.Ctx) error
@@ -31,13 +31,14 @@ func (controller *ProductControllerImpl) FindAllProducts(ctx *fiber.Ctx) error {
 	return helper.SuccessResponse(ctx, dto.ApiResponse{Data: result})
 }
 
-func (controller *ProductControllerImpl) FindProductById(ctx *fiber.Ctx) error {
+func (controller *ProductControllerImpl) FindProductDetail(ctx *fiber.Ctx) error {
 	id, err := strconv.Atoi(ctx.Params("productId"))
 	exception.PanicIfError(err)
 
-	var result dto.ProductResponse
-	result, err = controller.ProductService.FindProductById(id)
+	var result dto.ProductDetailResponse
+	result, err = controller.ProductService.FindProductDetail(id)
 	exception.PanicIfError(err)
+
 	return helper.SuccessResponse(ctx, dto.ApiResponse{Data: result})
 }
 

@@ -11,6 +11,7 @@ type ProductRepository interface {
 	Create(product domain.Product) (domain.Product, error)
 	Update(product domain.Product) (domain.Product, error)
 	Delete(product domain.Product) error
+	FindDetail(productId int) (domain.Product, error)
 }
 
 type ProductRepositoryImpl struct {
@@ -25,7 +26,7 @@ func NewProductRepository(db *gorm.DB) *ProductRepositoryImpl {
 
 func (repository ProductRepositoryImpl) FindAll() []domain.Product {
 	var products []domain.Product
-	err := repository.DB.Find(&products).Error
+	err := repository.DB.Preload("Category").Find(&products).Error
 	if err != nil {
 		products = []domain.Product{}
 	}
@@ -60,4 +61,13 @@ func (repository ProductRepositoryImpl) Update(product domain.Product) (domain.P
 func (repository ProductRepositoryImpl) Delete(product domain.Product) error {
 	err := repository.DB.Delete(&product).Error
 	return err
+}
+
+func (repository ProductRepositoryImpl) FindDetail(productId int) (domain.Product, error) {
+	var product domain.Product
+	err := repository.DB.Table("products").Preload("Category").Where("id=?", productId).First(&product).Error
+	if err != nil {
+		return product, err
+	}
+	return product, nil
 }

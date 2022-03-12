@@ -8,7 +8,7 @@ import (
 func SetupProductRoutes(router fiber.Router, controller controller.ProductController) {
 	productRoutes := router.Group("/products")
 	productRoutes.Get("/", controller.FindAllProducts)
-	productRoutes.Get("/:productId", controller.FindProductById)
+	productRoutes.Get("/:productId", controller.FindProductDetail)
 	productRoutes.Post("/", controller.CreateProduct)
 	productRoutes.Put("/:productId", controller.UpdateProduct)
 	productRoutes.Delete("/:productId", controller.DeleteProduct)
