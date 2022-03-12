@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gofiber/fiber/v2"
+	log "github.com/sirupsen/logrus"
 	"m3gaplazma/gofiber-restapi/exception"
 	"m3gaplazma/gofiber-restapi/helper"
 	"m3gaplazma/gofiber-restapi/model/dto"
@@ -27,6 +28,7 @@ func NewProductController(service *service.ProductServiceImpl) *ProductControlle
 }
 
 func (controller *ProductControllerImpl) FindAllProducts(ctx *fiber.Ctx) error {
+	log.Println("find all products")
 	result := controller.ProductService.FindAllProducts()
 	return helper.SuccessResponse(ctx, dto.ApiResponse{Data: result})
 }
