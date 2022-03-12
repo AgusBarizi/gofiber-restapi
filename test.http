@@ -2,8 +2,8 @@
 GET http://127.0.0.1:3000/api/products
 Accept: application/json
 
-### Find Product By Id
-GET http://127.0.0.1:3000/api/products/25
+### Find Product Detail
+GET http://127.0.0.1:3000/api/products/20
 Accept: application/json
 
 ### Create Product
@@ -12,10 +12,11 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "name": "Redmi Note 10 Pro",
+  "name": "MS Glow For Man",
   "price": 3500000,
   "sku": "RN-10PRO",
-  "stock": 10
+  "stock": 10,
+  "category_id": 5
 }
 
 ### Update Product By Id
@@ -27,7 +28,8 @@ Content-Type: application/json
   "name": "Smartphone BlackBerry - Black Edition",
   "price": 100,
   "sku": "BB-001",
-  "stock": 123
+  "stock": 123,
+  "category_id": 4
 }
 
 ### Delete Product By Id
