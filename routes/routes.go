@@ -11,6 +11,11 @@ import (
 func SetupRoutes(router *fiber.App) {
 	api := router.Group("/api")
 
+	userRepository := repository.NewUserRepository(config.DB)
+	userService := service.NewUserService(userRepository)
+	userController := controller.NewUserController(userService)
+	SetupUserRoutes(api, userController)
+
 	categoryRepositoryImpl := repository.NewCategoryRepository(config.DB)
 	categoryServiceImpl := service.NewCategoryService(categoryRepositoryImpl)
 	categoryControllerImpl := controller.NewCategoryController(categoryServiceImpl)

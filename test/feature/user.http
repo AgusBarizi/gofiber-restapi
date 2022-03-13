@@ -1,0 +1,32 @@
+### Find All Users
+GET http://127.0.0.1:3000/api/users
+Accept: application/json
+X-API-Key: secret
+
+### Find User By Id
+GET http://127.0.0.1:3000/api/users/2
+Accept: application/json
+X-API-Key: secret
+
+### Login
+POST http://127.0.0.1:3000/api/login
+Accept: application/json
+X-API-Key: secret
+Content-Type: application/json
+
+{
+  "email": "user@gmail.com",
+  "password": "passwaord"
+}
+
+### Register
+POST http://127.0.0.1:3000/api/register
+Accept: application/json
+X-API-Key: secret
+Content-Type: application/json
+
+{
+  "email": "user@gmail.com",
+  "name": "User Test",
+  "password": "password"
+}
