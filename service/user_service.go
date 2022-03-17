@@ -1,11 +1,14 @@
 package service
 
 import (
+	"encoding/json"
 	"errors"
+	"github.com/golang-jwt/jwt"
 	"m3gaplazma/gofiber-restapi/helper"
 	"m3gaplazma/gofiber-restapi/model/dto"
 	"m3gaplazma/gofiber-restapi/model/mapper"
 	"m3gaplazma/gofiber-restapi/repository"
+	"time"
 )
 
 type UserService interface {
@@ -79,7 +82,26 @@ func (service UserServiceImpl) Login(request dto.UserLoginRequest) (dto.UserLogi
 		return userResponse, errors.New("user not active")
 	}
 
-	user.ApiToken = helper.RandomString(30)
+	duration := time.Duration(8) * time.Hour
+	claims := helper.TokenClaims{
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(duration).Unix(),
+		},
+		Data: map[string]interface{}{
+			"id":    user.Id,
+			"email": user.Email,
+		},
+	}
+
+	var mapClaims jwt.MapClaims
+	byteClaims, _ := json.Marshal(claims)
+	_ = json.Unmarshal(byteClaims, &mapClaims)
+
+	user.ApiToken, err = helper.GenerateToken(&mapClaims)
+	if err != nil {
+		return userResponse, err
+	}
+
 	user, err = service.UserRepository.Update(user)
 	if err != nil {
 		return userResponse, err
