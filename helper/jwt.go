@@ -1,6 +1,9 @@
 package helper
 
-import "github.com/golang-jwt/jwt"
+import (
+	"fmt"
+	"github.com/golang-jwt/jwt"
+)
 
 var JWTSignatureKey = []byte("SECRET-KEY")
 var JWTSigningMethod = jwt.SigningMethodHS256
@@ -17,4 +20,17 @@ func GenerateToken(claims *jwt.MapClaims) (string, error) {
 		return "", err
 	}
 	return signedToken, nil
+}
+
+func VerifyToken(jwtToken string) (*jwt.Token, error) {
+	token, err := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
+		if _, isValid := token.Method.(*jwt.SigningMethodHMAC); !isValid {
+			return nil, fmt.Errorf("unexpected signing method: %w", token.Header["alg"])
+		}
+		return JWTSignatureKey, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return token, nil
 }
