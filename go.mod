@@ -15,6 +15,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.33.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
+	golang.org/x/crypto v0.0.0-20220315160706-3147a52a75dd // indirect
 	golang.org/x/sys v0.0.0-20220111092808-5a964db01320 // indirect
 	gorm.io/driver/mysql v1.3.2 // indirect
 	gorm.io/gorm v1.23.1 // indirect

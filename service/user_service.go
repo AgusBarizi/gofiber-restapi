@@ -3,7 +3,6 @@ package service
 import (
 	"errors"
 	"m3gaplazma/gofiber-restapi/helper"
-	"m3gaplazma/gofiber-restapi/model/domain"
 	"m3gaplazma/gofiber-restapi/model/dto"
 	"m3gaplazma/gofiber-restapi/model/mapper"
 	"m3gaplazma/gofiber-restapi/repository"
@@ -34,12 +33,20 @@ func (service UserServiceImpl) FindAllUsers() []dto.UserResponse {
 }
 
 func (service UserServiceImpl) CreateUser(request dto.CreateUserRequest) (dto.UserResponse, error) {
-	user := domain.User{
-		Name:     request.Name,
-		Email:    request.Email,
-		Password: request.Password,
-		IsActive: 1,
+	user, err := service.UserRepository.FindByEmail(request.Email)
+	if err == nil {
+		return dto.UserResponse{}, errors.New("user already registered")
 	}
+
+	password, err := helper.HashingPassword(request.Password)
+	if err != nil {
+		return dto.UserResponse{}, err
+	}
+
+	user.Name = request.Name
+	user.Email = request.Email
+	user.Password = password
+	user.IsActive = 1
 
 	result, err := service.UserRepository.Create(user)
 	if err != nil {
@@ -64,7 +71,7 @@ func (service UserServiceImpl) Login(request dto.UserLoginRequest) (dto.UserLogi
 		return userResponse, err
 	}
 
-	if user.Password != request.Password {
+	if !helper.VerifyPassword(user.Password, request.Password) {
 		return userResponse, errors.New("password not match")
 	}
 
