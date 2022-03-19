@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt"
 )
@@ -33,4 +34,16 @@ func VerifyToken(jwtToken string) (*jwt.Token, error) {
 		return nil, err
 	}
 	return token, nil
+}
+
+func DecodeToken(jwtToken string) (jwt.MapClaims, error) {
+	token, err := VerifyToken(jwtToken)
+	if err != nil {
+		return nil, err
+	}
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if ok && token.Valid {
+		return claims, nil
+	}
+	return nil, errors.New("invalid token")
 }
