@@ -7,9 +7,9 @@ import (
 )
 
 func SetupUserRoutes(router fiber.Router, controller controller.UserController) {
-	router.Post("/login", controller.Login)
-	router.Post("/register", controller.RegisterUser)
-	categoryRoutes := router.Group("/users", middleware.ApiKeyMiddleware)
+	router.Post("/login", middleware.ApiKeyMiddleware, controller.Login)
+	router.Post("/register", middleware.ApiKeyMiddleware, controller.RegisterUser)
+	categoryRoutes := router.Group("/users", middleware.ApiKeyMiddleware, middleware.AuthMiddleware)
 	categoryRoutes.Get("/", controller.FindAllUsers)
 	categoryRoutes.Get("/:userId", controller.FindUserById)
 	categoryRoutes.Post("/:userId/activate", controller.ActivateUser)

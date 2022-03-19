@@ -7,7 +7,7 @@ import (
 )
 
 func SetupCategoryRoutes(router fiber.Router, controller controller.CategoryController) {
-	categoryRoutes := router.Group("/categories", middleware.ApiKeyMiddleware)
+	categoryRoutes := router.Group("/categories", middleware.ApiKeyMiddleware, middleware.AuthMiddleware)
 	categoryRoutes.Get("/", controller.FindAllCategories)
 	categoryRoutes.Get("/:categoryId", controller.FindCategoryById)
 	categoryRoutes.Post("/", controller.CreateCategory)
