@@ -32,6 +32,7 @@ func main() {
 		TimeFormat: "2006-01-02 15:04:05",
 		TimeZone:   "Asia/jakarta",
 	}))
+	app.Static("/storage", "./storage")
 
 	app.Get("/", func(ctx *fiber.Ctx) error {
 		return ctx.SendString("GoFiber RestApi")
