@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"errors"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	log "github.com/sirupsen/logrus"
 	"m3gaplazma/gofiber-restapi/exception"
@@ -47,6 +49,16 @@ func (controller *ProductControllerImpl) FindProductDetail(ctx *fiber.Ctx) error
 func (controller *ProductControllerImpl) CreateProduct(ctx *fiber.Ctx) error {
 	request := new(dto.CreateProductRequest)
 	err := ctx.BodyParser(request)
+	exception.PanicIfError(err)
+	fmt.Println(request)
+
+	file, err := ctx.FormFile("image")
+	exception.PanicIfError(err)
+	if file == nil {
+		panic(errors.New("nothing file to be upload"))
+	}
+	request.Image = fmt.Sprintf("/storage/product/%s", file.Filename)
+	err = ctx.SaveFile(file, fmt.Sprintf("./%s", request.Image))
 	exception.PanicIfError(err)
 	validation.CreateProductValidation(*request)
 

@@ -44,6 +44,7 @@ func (service *ProductServiceImpl) CreateProduct(request dto.CreateProductReques
 		Stock:      request.Stock,
 		Price:      request.Price,
 		CategoryId: request.CategoryId,
+		Image:      request.Image,
 	}
 	result, err := service.ProductRepository.Create(product)
 	if err != nil {

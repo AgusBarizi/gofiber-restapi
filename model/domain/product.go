@@ -13,4 +13,5 @@ type Product struct {
 	DeletedAt  time.Time `json:"deleted_at"`
 	CategoryId int       `json:"category_id"`
 	Category   *Category `json:"category"`
+	Image      string    `json:"image"`
 }

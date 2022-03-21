@@ -7,6 +7,7 @@ type ProductResponse struct {
 	Price      int64  `json:"price"`
 	Stock      int64  `json:"stock"`
 	CategoryId int    `json:"category_id"`
+	Image      string `json:"image"`
 }
 
 type ProductDetailResponse struct {
@@ -17,4 +18,5 @@ type ProductDetailResponse struct {
 	Stock      int64       `json:"stock"`
 	CategoryId int         `json:"category_id"`
 	Category   interface{} `json:"category"`
+	Image      string      `json:"image"`
 }

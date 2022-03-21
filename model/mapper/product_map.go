@@ -13,6 +13,7 @@ func ToProductResponse(product domain.Product) dto.ProductResponse {
 		Price:      product.Price,
 		Stock:      product.Stock,
 		CategoryId: product.CategoryId,
+		Image:      product.Image,
 	}
 }
 
@@ -24,6 +25,7 @@ func ToProductDetailResponse(product domain.Product) dto.ProductDetailResponse {
 		Price:      product.Price,
 		Stock:      product.Stock,
 		CategoryId: product.CategoryId,
+		Image:      product.Image,
 	}
 	if product.Category != nil {
 		productDetail.Category = ToCategoryResponse(*product.Category)
